@@ -1,0 +1,53 @@
+# ==================================
+# SYSTEM FILES
+# ==================================
+.DS_Store
+Thumbs.db
+
+# ==================================
+# LOG FILES
+# ==================================
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+*.tmp
+*.temp
+*.orig
+
+# ==================================
+# EDITORS
+# ==================================
+.vscode/
+.idea/
+
+# ==================================
+# BACKEND
+# ==================================
+backend/node_modules/
+backend/.env
+backend/dist/
+backend/build/
+backend/.vite/
+
+# Sequelize auto-generated files
+backend/models/*.js.map
+
+# ==================================
+# FRONTEND
+# ==================================
+frontend/node_modules/
+frontend/.env
+frontend/dist/
+frontend/build/
+frontend/.vite/
+
+# Vite cache
+frontend/.vite/
+backend/.vite/
+
+# ==================================
+# GENERAL NODE MODULES (extra safety)
+# ==================================
+node_modules/
