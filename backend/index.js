@@ -27,6 +27,10 @@ app.use("/api/users", userRoutes);
 import productRoutes from "./routes/productRoutes.js";
 app.use("/api/products", productRoutes);
 
+import salesRoutes from "./routes/admin/salesRoutes.js";
+app.use("/api/sales", salesRoutes);
+
+
 const startServer = async () => {
   try {
     await connectDB();
