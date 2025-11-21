@@ -7,7 +7,7 @@ dotenv.config();
 
 const app = express();
 
-// ⭐ FIX: CORS i saktë
+
 app.use(cors({
   origin: "http://localhost:5173",
   methods: ["GET", "POST", "PUT", "DELETE"],
@@ -21,7 +21,9 @@ app.get("/", (req, res) => {
   res.send("API is running...");
 });
 
-// routes
+import userRoutes from "./routes/admin/userRoutes.js";
+app.use("/api/users", userRoutes);
+
 import productRoutes from "./routes/productRoutes.js";
 app.use("/api/products", productRoutes);
 
