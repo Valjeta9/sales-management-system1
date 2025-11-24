@@ -30,6 +30,9 @@ app.use("/api/products", productRoutes);
 import salesRoutes from "./routes/admin/salesRoutes.js";
 app.use("/api/sales", salesRoutes);
 
+import analyticsRoutes from "./routes/admin/analyticsRoutes.js";
+app.use("/api/analytics", analyticsRoutes);
+
 
 const startServer = async () => {
   try {
