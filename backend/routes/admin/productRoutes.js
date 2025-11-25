@@ -6,18 +6,16 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
-} from "../controllers/productController.js";
+}from "../../controllers/admin/productController.js";
 
 const router = express.Router();
 
-// Image upload config
 const storage = multer.diskStorage({
   destination: "uploads/",
   filename: (req, file, cb) => cb(null, Date.now() + "-" + file.originalname),
 });
 const upload = multer({ storage });
 
-// Routes
 router.get("/", getProducts);
 router.get("/:id", getProduct);
 router.post("/", upload.single("image"), createProduct);

@@ -1,19 +1,16 @@
-import { useEffect, useState } from "react";
+ import { useEffect, useState } from "react";
 import axios from "axios";
 
 export default function Products() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Modal state
   const [showModal, setShowModal] = useState(false);
   const [editProduct, setEditProduct] = useState(null);
 
-  // Delete confirmation modal
   const [showConfirm, setShowConfirm] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
 
-  // Form state
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -26,7 +23,6 @@ export default function Products() {
 
   const [previewImage, setPreviewImage] = useState(null);
 
-  // Fetch products
   const fetchProducts = async () => {
     try {
       const res = await axios.get("http://localhost:5000/api/products");
@@ -82,7 +78,6 @@ export default function Products() {
     setShowModal(true);
   };
 
-  // Delete functions
   const handleDeleteClick = (id) => {
     setDeleteId(id);
     setShowConfirm(true);
@@ -105,7 +100,6 @@ export default function Products() {
     setDeleteId(null);
   };
 
-  // Submit Add/Edit
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -171,9 +165,9 @@ export default function Products() {
             <tr key={p.product_id}>
               <td>{p.product_id}</td>
               <td>
-                {p.image_path ? (
+                {p.image ? (
                   <img
-                    src={`http://localhost:5000/${p.image_path}`}
+                    src={`http://localhost:5000/${p.image}`}
                     alt={p.name}
                     style={{ width: "50px", height: "50px", objectFit: "cover" }}
                   />

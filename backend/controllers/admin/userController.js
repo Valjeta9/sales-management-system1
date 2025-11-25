@@ -1,17 +1,20 @@
 import User from "../../models/users/userModel.js";
 
-// GET all users
 export const fetchUsers = async (req, res) => {
   try {
-    const users = await User.findAll();
+    const role = req.query.role; 
+    const users = await User.findAll({
+      attributes: ["user_id", "name", "email", "role", "status"],
+      where: role ? { role } : {}, 
+    });
     res.json(users);
-  } catch (error) {
-    console.error("Fetch users error:", error);
-    res.status(500).json({ error: "Server error" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error fetching users" });
   }
 };
 
-// CREATE user
+
 export const addUser = async (req, res) => {
   try {
     const { name, email, password, role, status } = req.body;
@@ -32,7 +35,6 @@ export const addUser = async (req, res) => {
 };
 
 
-// UPDATE user
 export const editUser = async (req, res) => {
   try {
     await User.update(req.body, {
@@ -49,7 +51,6 @@ export const editUser = async (req, res) => {
 };
 
 
-// DELETE user
 export const removeUser = async (req, res) => {
   try {
     await User.update(
@@ -65,4 +66,3 @@ export const removeUser = async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 };
-
