@@ -2,42 +2,41 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import { sequelize, connectDB } from "./src/config/db.js";
-import "./models/index.js";
 
 dotenv.config();
 
 const app = express();
 
-// CORS
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-  })
-);
+app.use(cors({
+  origin: "http://localhost:5173",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
 
 app.use(express.json());
 
-app.use("/uploads", express.static("uploads"));
 
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
 
-// routes
+app.use('/uploads', express.static('uploads'));
 import userRoutes from "./routes/admin/userRoutes.js";
 app.use("/api/users", userRoutes);
+
 import productRoutes from "./routes/admin/productRoutes.js";
 app.use("/api/products", productRoutes);
+
 import salesRoutes from "./routes/admin/salesRoutes.js";
 app.use("/api/sales", salesRoutes);
 
 import analyticsRoutes from "./routes/admin/analyticsRoutes.js";
 app.use("/api/analytics", analyticsRoutes);
 
-import inventoryLogRoutes from "./routes/admin/inventoryLogRoutes.js";
-app.use("/api/inventory-logs", inventoryLogRoutes);
+import settingsRoutes from "./routes/admin/settingsRoutes.js" 
+app.use("/api/settings", settingsRoutes);
+
+
 
 const startServer = async () => {
   try {
@@ -46,7 +45,9 @@ const startServer = async () => {
     console.log("✓ Database connected");
 
     const PORT = process.env.PORT || 5000;
-    app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+    app.listen(PORT, () =>
+      console.log(`🚀 Server running on port ${PORT}`)
+    );
   } catch (error) {
     console.error("❌ Error starting server:", error);
   }

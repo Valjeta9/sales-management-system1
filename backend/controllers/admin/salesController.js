@@ -6,7 +6,13 @@ export const getSales = async (req, res) => {
     const { startDate, endDate, status, payment_method } = req.query;
 
     let query = `
-      SELECT o.*, u.name AS customer
+      SELECT 
+        o.order_id,
+        o.total,
+        o.status,
+        o.payment_method,
+        o.order_date,
+        u.name AS customer
       FROM orders o
       LEFT JOIN users u ON o.consumer_id = u.user_id
       WHERE 1=1
@@ -36,7 +42,10 @@ export const getSales = async (req, res) => {
 
     query += " ORDER BY o.order_date ASC";
 
-    const [rows] = await sequelize.query(query, { replacements: params });
+    const rows = await sequelize.query(query, {
+      replacements: params,
+      type: QueryTypes.SELECT
+    });
 
     res.json(rows);
   } catch (error) {

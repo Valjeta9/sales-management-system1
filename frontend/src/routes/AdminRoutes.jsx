@@ -5,18 +5,29 @@ import Products from "../components/pages/admin/Products";
 import Users from "../components/pages/admin/Users";
 import Sales from "../components/pages/admin/Sales";
 import Analytics from "../components/pages/admin/Analytics";
-import InventoryLogs from "../components/pages/admin/inventoryLogs";
+import Settings from "../components/pages/admin/Settings";
 
-export default function AdminRoutes() {
+export default function AdminRoutes({ theme, setTheme }) {
   return (
     <Routes>
-      <Route path="/" element={<AdminLayout />}>
+
+      <Route 
+        path="/" 
+        element={<AdminLayout theme={theme} setTheme={setTheme} />} 
+      >
+
+        {/* TË GJITHA FAQET E ADMINIT HYJNË KËTU */}
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="products" element={<Products />} />
         <Route path="users" element={<Users />} />
         <Route path="sales" element={<Sales />} />
         <Route path="analytics" element={<Analytics />} />
-         <Route path="inventory" element={<InventoryLogs />} />
+       <Route
+  path="settings"
+  element={<Settings theme={theme} setTheme={setTheme} />}
+/>
+
+
       </Route>
     </Routes>
   );

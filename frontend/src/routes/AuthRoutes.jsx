@@ -1,8 +1,9 @@
 import { Routes, Route } from "react-router-dom";
 
-import Login from "../components/pages/auth/Login";
 import ForgotPassword from "../components/pages/auth/ForgotPassword";
 import UpdatePassword from "../components/pages/auth/UpdatePassword";
+import Login from "../components/pages/auth/Login";
+
 
 export default function AuthRoutes() {
   return (
@@ -13,4 +14,3 @@ export default function AuthRoutes() {
     </Routes>
   );
 }
-

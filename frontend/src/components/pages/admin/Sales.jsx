@@ -116,7 +116,7 @@ export default function Sales() {
       {/* -----------------------------
           SALES TABLE
       ----------------------------- */}
-      <table className="table table-dark table-striped text-white">
+      <table className="table theme-table">
         <thead>
           <tr>
             <th>Date</th>
@@ -129,41 +129,44 @@ export default function Sales() {
         </thead>
 
         <tbody>
-          {sales.length === 0 ? (
-            <tr>
-              <td colSpan="6" className="text-center text-muted">
-                No sales found.
-              </td>
-            </tr>
-          ) : (
-            sales.map((s) => (
-              <tr key={s.order_id}>
-                <td>{new Date(s.order_date).toLocaleDateString()}</td>
-                <td>{s.order_id}</td>
-                <td>{s.consumer?.name || "Unknown"}</td>
-                <td>${s.total}</td>
+  {sales.length === 0 ? (
+    <tr>
+      <td colSpan="6" className="text-center text-muted">
+        No sales found.
+      </td>
+    </tr>
+  ) : (
+    sales.map((s) => (
+      <tr key={s.order_id}>
+        <td>{new Date(s.order_date).toLocaleDateString()}</td>
+        <td>{s.order_id}</td>
+        
+        <td>{s.customer || "Unknown"}</td>
 
-                <td>
-                  <span
-                    className={`badge ${
-                      s.status === "completed"
-                        ? "bg-success"
-                        : s.status === "pending"
-                        ? "bg-warning"
-                        : s.status === "shipped"
-                        ? "bg-info"
-                        : "bg-danger"
-                    }`}
-                  >
-                    {s.status}
-                  </span>
-                </td>
+        <td>${s.total}</td>
 
-                <td>{s.payment_method}</td>
-              </tr>
-            ))
-          )}
-        </tbody>
+        <td>
+          <span
+            className={`badge ${
+              s.status === "completed"
+                ? "bg-success"
+                : s.status === "pending"
+                ? "bg-warning"
+                : s.status === "shipped"
+                ? "bg-info"
+                : "bg-danger"
+            }`}
+          >
+            {s.status}
+          </span>
+        </td>
+
+        <td>{s.payment_method}</td>
+      </tr>
+    ))
+  )}
+</tbody>
+
       </table>
     </div>
   );

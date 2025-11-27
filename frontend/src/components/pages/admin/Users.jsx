@@ -208,8 +208,7 @@ export default function Users() {
         </button>
       </div>
 
-      {/* Users table */}
-      <table className="table table-dark table-striped text-white">
+     <table className="table theme-table">
         <thead>
           <tr>
             <th>ID</th>
@@ -232,11 +231,7 @@ export default function Users() {
             filteredUsers.map((u) => (
               <tr
                 key={u.user_id}
-                style={{
-                  opacity: u.status === "deleted" ? 0.5 : 1,
-                  backgroundColor:
-                    u.status === "deleted" ? "#333" : "inherit",
-                }}
+                className={u.status === "deleted" ? "deleted-row" : ""}
               >
                 <td>{u.user_id}</td>
                 <td>{u.name}</td>

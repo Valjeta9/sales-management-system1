@@ -1,22 +1,20 @@
 import Sidebar from "./Sidebar";
 import { Outlet } from "react-router-dom";
 
-export default function AdminLayout() {
+export default function AdminLayout({ theme, setTheme }) {
+
   return (
     <div
-      style={{
-        minHeight: "100vh",
-        width: "100vw",
-        backgroundColor: "#0f1514",  // mbulon krejt ekranin
-        display: "flex"
-      }}
+      className={
+        "d-flex " + (theme === "light" ? "light-theme" : "dark-theme")
+      }
+      style={{ minHeight: "100vh" }}
     >
-      <Sidebar />
+      <Sidebar theme={theme} setTheme={setTheme} />
 
-      <div className="flex-grow-1 p-4 text-white" style={{ background: "#0f1514" }}>
+      <div className="content-area flex-grow-1 p-4">
         <Outlet />
       </div>
     </div>
   );
 }
-

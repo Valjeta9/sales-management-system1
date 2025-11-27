@@ -1,37 +1,44 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import AdminRoutes from "./routes/AdminRoutes";
+import AuthRoutes from "./routes/AuthRoutes";   // ✔️ KORREKT
+import Homepage from "./components/pages/admin/Homepage";
+
 
 function App() {
-  const [message, setMessage] = useState("");
+  const [theme, setTheme] = useState(
+    localStorage.getItem("theme") || "dark"
+  );
 
-  // Testim i backend-it
   useEffect(() => {
-    fetch("http://localhost:5000/")
-      .then((res) => res.text())
-      .then((data) => setMessage(data))
-      .catch((err) => console.error("Error:", err));
-  }, []);
+    if (theme === "dark") {
+      document.body.classList.remove("light-mode");
+      document.body.classList.add("dark-mode");
+    } else {
+      document.body.classList.remove("dark-mode");
+      document.body.classList.add("light-mode");
+    }
+    localStorage.setItem("theme", theme);
+  }, [theme]);
 
   return (
     <BrowserRouter>
       <Routes>
 
-        {/* ADMIN PANEL */}
-        <Route path="/admin/*" element={<AdminRoutes />} />
+        {/* AUTH */}
+        <Route path="/auth/*" element={<AuthRoutes />} />
 
-        {/* HOMEPAGE */}
+        {/* ADMIN PANEL */}
         <Route
-          path="/"
-          element={
-            <div style={{ textAlign: "center", marginTop: "50px" }}>
-              <h1>Frontend is running with React + Vite ⚡</h1>
-              <p style={{ fontSize: "20px" }}>{message}</p>
-            </div>
-          }
+          path="/admin/*"
+          element={<AdminRoutes theme={theme} setTheme={setTheme} />}
         />
 
-        {/* ERROR PAGE */}
+        {/* HOMEPAGE */}
+        <Route path="/" element={<Homepage />} />
+
+        {/* 404 */}
         <Route path="*" element={<h1>404 - Page Not Found</h1>} />
       </Routes>
     </BrowserRouter>

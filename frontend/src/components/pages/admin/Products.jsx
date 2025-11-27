@@ -1,4 +1,4 @@
- import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 export default function Products() {
@@ -146,7 +146,7 @@ export default function Products() {
       </button>
 
       {/* Product table */}
-      <table className="table table-dark table-striped text-white">
+      <table className="table table-striped theme-table">
         <thead>
           <tr>
             <th>ID</th>
