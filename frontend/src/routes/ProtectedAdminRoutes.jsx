@@ -9,34 +9,32 @@ export default function ProtectedAdminRoute({ children }) {
   useEffect(() => {
     const checkAccess = async () => {
       try {
-        const res = await axios.get(
-          "http://localhost:5000/api/auth/me",
-          { withCredentials: true }
-        );
+        const res = await axios.get("http://localhost:5000/api/auth/me", {
+          withCredentials: true,
+        });
 
         if (res.data.role === "admin") {
           setAllow(true);
         }
+
         setLoading(false);
       } catch {
-
         try {
           await axios.post(
             "http://localhost:5000/api/auth/refresh",
             {},
             { withCredentials: true }
           );
-
-          const res2 = await axios.get(
-            "http://localhost:5000/api/auth/me",
-            { withCredentials: true }
-          );
+          const res2 = await axios.get("http://localhost:5000/api/auth/me", {
+            withCredentials: true,
+          });
 
           if (res2.data.role === "admin") {
             setAllow(true);
           }
+
           setLoading(false);
-        } catch  {
+        } catch {
           setAllow(false);
           setLoading(false);
         }

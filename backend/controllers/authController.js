@@ -5,64 +5,63 @@ import jwt from "jsonwebtoken";
 // HELPERS
 // ==========================
 
-// ACCESS TOKEN → skadon pas 10 sekondave
+// ACCESS TOKEN (15 min)
 const createAccessToken = (user) => {
   return jwt.sign(
     { id: user.user_id, role: user.role },
     process.env.JWT_SECRET,
-    { expiresIn: "10s" } // 10 sekonda
+    { expiresIn: "15m" }
   );
 };
 
-// REFRESH TOKEN → skadon pas 10 sekondave
+// REFRESH TOKEN (7 days)
 const createRefreshToken = (user) => {
   return jwt.sign(
     { id: user.user_id, role: user.role },
     process.env.JWT_REFRESH_SECRET,
-    { expiresIn: "10s" } // 10 sekonda
+    { expiresIn: "7d" }
   );
 };
 
 // ==========================
-// LOGIN (COOKIE-BASED AUTH)
+// LOGIN
 // ==========================
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Kontrollo nese user ekziston
     const [rows] = await sequelize.query(
       "SELECT * FROM users WHERE email = ? AND password = ? LIMIT 1",
       { replacements: [email, password] }
     );
 
-    if (rows.length === 0) {
+    if (rows.length === 0)
       return res.status(401).json({ message: "Invalid email or password" });
-    }
 
     const user = rows[0];
 
-    if (user.status === "deleted") {
-      return res.status(403).json({ message: "Account is deactivated" });
-    }
+    if (user.status === "deleted")
+      return res
+        .status(403)
+        .json({ message: "Account is deactivated" });
 
-    // Krijo tokenat
     const accessToken = createAccessToken(user);
     const refreshToken = createRefreshToken(user);
 
-    // Vendosi tokenat në cookies → maxAge 10 sekonda
+    // Access Token – 15 min
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
       secure: false,
       sameSite: "lax",
-      maxAge: 10 * 1000, // 10 sekonda
+      maxAge: 15 * 60 * 1000,
     });
 
+    // Refresh Token – 7 days
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: false,
       sameSite: "lax",
-      maxAge: 10 * 1000, // 10 sekonda
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     return res.json({
@@ -82,7 +81,7 @@ export const login = async (req, res) => {
 };
 
 // ==========================
-// ME (Kontroll i identitetit të userit)
+// ME
 // ==========================
 export const me = (req, res) => {
   return res.json({
@@ -92,31 +91,29 @@ export const me = (req, res) => {
 };
 
 // ==========================
-// REFRESH ACCESS TOKEN (10 sekonda)
+// REFRESH TOKEN HANDLER
 // ==========================
 export const refresh = (req, res) => {
   const refreshToken = req.cookies?.refreshToken;
 
-  if (!refreshToken) {
+  if (!refreshToken)
     return res.status(401).json({ message: "No refresh token" });
-  }
 
-  jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, (err, userData) => {
-    if (err) {
+  jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, (err, data) => {
+    if (err)
       return res.status(403).json({ message: "Invalid refresh token" });
-    }
 
     const newAccessToken = jwt.sign(
-      { id: userData.id, role: userData.role },
+      { id: data.id, role: data.role },
       process.env.JWT_SECRET,
-      { expiresIn: "10s" } // 10 sekonda
+      { expiresIn: "15m" }
     );
 
     res.cookie("accessToken", newAccessToken, {
       httpOnly: true,
       secure: false,
       sameSite: "lax",
-      maxAge: 10 * 1000, // 10 sekonda
+      maxAge: 15 * 60 * 1000,
     });
 
     return res.json({ message: "Access token refreshed" });

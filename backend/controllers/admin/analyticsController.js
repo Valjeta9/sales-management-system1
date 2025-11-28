@@ -1,24 +1,14 @@
-// backend/controllers/admin/analyticsController.js
 import { sequelize } from "../../src/config/db.js";
 
-/**
- * Helper: lexon datat nga query string
- * startDate / endDate vijnë nga frontend (yyyy-mm-dd)
- */
 function getDateRange(req) {
   const { startDate, endDate } = req.query;
 
-  // default shumë “broad” nëse nuk dërgohen nga frontend
   const safeStart = startDate || "2000-01-01";
   const safeEnd = endDate || "2100-01-01";
 
   return { startDate: safeStart, endDate: safeEnd };
 }
 
-/* =====================================================
-   1. SALES BY MONTH  (filtrim me datë + kategori)
-   GET /api/analytics/sales-by-month?startDate=...&endDate=...&category_id=...
-===================================================== */
 export const getSalesByMonth = async (req, res) => {
   try {
     const category_id = req.query.category_id || null;
@@ -74,10 +64,6 @@ export const getSalesByMonth = async (req, res) => {
 };
 
 
-/* =====================================================
-   2. REVENUE BY CATEGORY  (filtrim me datë)
-   GET /api/analytics/revenue-by-category?startDate=...&endDate=...
-===================================================== */
 export const getRevenueByCategory = async (req, res) => {
   try {
     const { startDate, endDate } = getDateRange(req);
@@ -111,10 +97,6 @@ export const getRevenueByCategory = async (req, res) => {
 };
 
 
-/* =====================================================
-   3. TOP CUSTOMERS  (filtrim me datë + kategori)
-   GET /api/analytics/top-customers?startDate=...&endDate=...&category_id=...
-===================================================== */
 export const getTopCustomers = async (req, res) => {
   try {
     const { startDate, endDate } = getDateRange(req);
@@ -150,10 +132,6 @@ export const getTopCustomers = async (req, res) => {
   }
 };
 
-/* =====================================================
-   4. BEST SELLING PRODUCTS (filtrim me datë + kategori)
-   GET /api/analytics/best-products?startDate=...&endDate=...&category_id=...
-===================================================== */
 export const getBestSellingProducts = async (req, res) => {
   try {
     const { startDate, endDate } = getDateRange(req);
