@@ -1,7 +1,6 @@
 import { NavLink } from "react-router-dom";
 
 export default function Sidebar({ theme }) {
-
   const isLight = theme === "light";
 
   return (
@@ -22,6 +21,14 @@ export default function Sidebar({ theme }) {
       <NavLink to="/admin/analytics" className="sidebar-link">Analytics</NavLink>
       <NavLink to="/admin/users" className="sidebar-link">Users</NavLink>
       <NavLink to="/admin/settings" className="sidebar-link">Settings</NavLink>
+
+      <hr className="my-3" />
+
+     <NavLink to="/auth/logout" className="sidebar-link text-danger fw-bold">
+  Logout
+</NavLink>
+
+
     </div>
   );
 }

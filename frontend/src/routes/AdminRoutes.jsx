@@ -6,6 +6,7 @@ import Users from "../components/pages/admin/Users";
 import Sales from "../components/pages/admin/Sales";
 import Analytics from "../components/pages/admin/Analytics";
 import Settings from "../components/pages/admin/Settings";
+import Logout from "../components/pages/auth/Logout"
 
 export default function AdminRoutes({ theme, setTheme }) {
   return (
@@ -16,7 +17,6 @@ export default function AdminRoutes({ theme, setTheme }) {
         element={<AdminLayout theme={theme} setTheme={setTheme} />} 
       >
 
-        {/* TË GJITHA FAQET E ADMINIT HYJNË KËTU */}
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="products" element={<Products />} />
         <Route path="users" element={<Users />} />
@@ -26,6 +26,7 @@ export default function AdminRoutes({ theme, setTheme }) {
   path="settings"
   element={<Settings theme={theme} setTheme={setTheme} />}
 />
+    <Route path="logout" element={<Logout />} />
 
 
       </Route>

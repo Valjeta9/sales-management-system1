@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import cookieParser from "cookie-parser"; 
 import { sequelize, connectDB } from "./src/config/db.js";
 
 dotenv.config();
@@ -14,13 +15,25 @@ app.use(cors({
 }));
 
 app.use(express.json());
+app.use(cookieParser());
 
-
+// Test endpoint
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
 
+// Serve image uploads
 app.use('/uploads', express.static('uploads'));
+
+// ==========================
+// AUTH ROUTES (cookie-based)
+// ==========================
+import authRoutes from "./routes/authRoutes.js";
+app.use("/api/auth", authRoutes);
+
+// ==========================
+// ADMIN ROUTES
+// ==========================
 import userRoutes from "./routes/admin/userRoutes.js";
 app.use("/api/users", userRoutes);
 
@@ -33,10 +46,8 @@ app.use("/api/sales", salesRoutes);
 import analyticsRoutes from "./routes/admin/analyticsRoutes.js";
 app.use("/api/analytics", analyticsRoutes);
 
-import settingsRoutes from "./routes/admin/settingsRoutes.js" 
+import settingsRoutes from "./routes/admin/settingsRoutes.js";
 app.use("/api/settings", settingsRoutes);
-
-
 
 const startServer = async () => {
   try {

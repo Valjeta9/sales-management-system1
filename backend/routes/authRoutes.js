@@ -1,16 +1,16 @@
-import { Routes, Route } from "react-router-dom";
+import express from "express";
+import { login, logout, me } from "../controllers/authController.js";
+import { verifyToken } from "../middleware/verifyToken.js";
 
-import Login from "../components/pages/auth/Login";
-import ForgotPassword from "../components/pages/auth/ForgotPassword";
-import UpdatePassword from "../components/pages/auth/UpdatePassword";
+const router = express.Router();
 
-export default function AuthRoutes() {
-  return (
-    <Routes>
-      <Route path="login" element={<Login />} />
-      <Route path="forgot-password" element={<ForgotPassword />} />
-      <Route path="update-password" element={<UpdatePassword />} />
-    </Routes>
-  );
-}
+// LOGIN
+router.post("/login", login);
 
+// LOGOUT
+router.post("/logout", logout);
+
+// GET CURRENT USER
+router.get("/me", verifyToken, me);
+
+export default router;

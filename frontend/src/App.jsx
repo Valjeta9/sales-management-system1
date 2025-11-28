@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import AdminRoutes from "./routes/AdminRoutes";
-import AuthRoutes from "./routes/AuthRoutes";   // ✔️ KORREKT
+import AuthRoutes from "./routes/AuthRoutes";
 import Homepage from "./components/pages/admin/Homepage";
-
+import ProtectedAdminRoute from "./routes/ProtectedAdminRoutes"
 
 function App() {
   const [theme, setTheme] = useState(
@@ -26,19 +26,19 @@ function App() {
     <BrowserRouter>
       <Routes>
 
-        {/* AUTH */}
         <Route path="/auth/*" element={<AuthRoutes />} />
 
-        {/* ADMIN PANEL */}
         <Route
           path="/admin/*"
-          element={<AdminRoutes theme={theme} setTheme={setTheme} />}
+          element={
+            <ProtectedAdminRoute>
+              <AdminRoutes theme={theme} setTheme={setTheme} />
+            </ProtectedAdminRoute>
+          }
         />
 
-        {/* HOMEPAGE */}
         <Route path="/" element={<Homepage />} />
 
-        {/* 404 */}
         <Route path="*" element={<h1>404 - Page Not Found</h1>} />
       </Routes>
     </BrowserRouter>

@@ -1,70 +1,74 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  useEffect(() => {
+    axios.post("http://localhost:5000/api/auth/logout", {}, { withCredentials: true })
+      .catch(() => {});
+  }, []);
+
+  const handleLogin = (e) => {
     e.preventDefault();
 
-    try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", {
-        email,
-        password,
-      });
+    const email = e.target.email.value;
+    const password = e.target.password.value;
 
-      localStorage.setItem("accessToken", res.data.accessToken);
-      localStorage.setItem("refreshToken", res.data.refreshToken);
+    axios.post(
+      "http://localhost:5000/api/auth/login",
+      { email, password },
+      { withCredentials: true }
+    )
+    .then(res => {
+      if (res.data.message === "Success") {
+        const role = res.data.user.role;
 
-      const role = res.data.user.role;
-
-      if (role === "admin") {
-        navigate("/admin/dashboard");
-      } else {
-        navigate("/"); 
+        if (role === "admin") {
+          navigate("/admin/dashboard");
+        } else {
+          navigate("/");
+        }
       }
-    } catch (err) {
-      console.log("Login error:", err);
-      alert("Invalid email or password");
-    }
+    })
+    .catch(err => {
+      if (err.response?.status === 401) {
+        setErrorMessage("Invalid email or password");
+      } else if (err.response?.status === 403) {
+        setErrorMessage("Account disabled");
+      } else {
+        setErrorMessage("Unexpected error");
+      }
+    });
   };
 
   return (
     <div className="auth-container d-flex justify-content-center align-items-center vh-100">
-      <div className="auth-card p-4 rounded shadow-lg" style={{ width: "400px" }}>
-        <h2 className="text-center mb-4 text-success fw-bold">Customer Login</h2>
+      <div className="p-4 rounded shadow-lg bg-white" style={{ width: "400px" }}>
+        <h3 className="text-center mb-4">Login</h3>
+
+        {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
 
         <form onSubmit={handleLogin}>
-          <label className="form-label">Email</label>
-          <input
-            type="email"
-            className="form-control mb-3"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-
-          <label className="form-label">Password</label>
-          <input
-            type="password"
-            className="form-control mb-3"
-            placeholder="Enter your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-
-          <button className="btn btn-success w-100 mt-2">Login</button>
-
-          <div className="text-center mt-3">
-            <Link to="/auth/forgot-password" className="text-info">
-              Forgot Password?
-            </Link>
+          <div className="mb-3">
+            <label>Email:</label>
+            <input name="email" className="form-control" required />
           </div>
+
+          <div className="mb-3">
+            <label>Password:</label>
+            <input name="password" type="password" className="form-control" required />
+          </div>
+
+          <button className="btn btn-success w-100 mt-2" style={{ height: "45px" }}>
+            LOGIN
+          </button>
+
+          <p className="text-center mt-3">
+            <Link to="/auth/forgot-password">Forgot Password?</Link>
+          </p>
         </form>
       </div>
     </div>
